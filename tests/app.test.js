@@ -19,3 +19,16 @@ test('GET /tasks — retourne la liste des tâches', async () => {
     expect(Array.isArray(res.body)).toBe(true)
     expect(res.body.length).toBeGreaterThan(0)
 })
+
+test('POST /tasks — retourne la nouvelle tâche', async () => {
+    const task = { title: 'Apprendre React' };
+
+    const res = await request(app)
+        .post('/tasks')
+        .set("Content-Type", 'application/json')
+        .send(task);
+
+    expect(res.status).toBe(201);
+    expect(res.body.id).toBeDefined();
+    expect(res.body.title).toBe(task.title);
+});
