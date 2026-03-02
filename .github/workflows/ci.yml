@@ -14,14 +14,14 @@ jobs:
     steps:
       - name: "[DEBUG] Starting Checkout"
         run: echo "Initiating source code retrieval for branch ${{ github.ref }}..."
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: "[INFO] Environment Setup"
         run: |
           echo "Preparing Node.js environment..."
           echo "Runner OS: ${{ runner.os }}"
           echo "Kernel version: $(uname -r)"
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
@@ -50,10 +50,10 @@ jobs:
     steps:
       - name: "[INIT] Re-checking out code for Test Job"
         run: echo "Job 'lint' passed. Starting Job 'test'..."
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: "[SETUP] Node.js Environment Injection"
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
