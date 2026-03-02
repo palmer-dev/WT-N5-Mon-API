@@ -49,7 +49,7 @@ jobs:
     needs: lint
     steps:
       - name: "[INIT] Re-checking out code for Test Job"
-        run: echo "Context: Job 'lint' passed. Starting Job 'test'..."
+        run: echo "Job 'lint' passed. Starting Job 'test'..."
       - uses: actions/checkout@v4
 
       - name: "[SETUP] Node.js Environment Injection"
