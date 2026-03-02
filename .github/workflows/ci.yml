@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline - Ultra Verbose Edition
 
 on:
   push:
@@ -12,13 +12,35 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
+      - name: "[DEBUG] Starting Checkout"
+        run: echo "Initiating source code retrieval for branch ${{ github.ref }}..."
       - uses: actions/checkout@v4
+
+      - name: "[INFO] Environment Setup"
+        run: |
+          echo "Preparing Node.js environment..."
+          echo "Runner OS: ${{ runner.os }}"
+          echo "Kernel version: $(uname -r)"
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - run: npm run lint
+
+      - name: "[VERBOSE] Dependency Installation"
+        run: |
+          echo "Running 'npm ci' to ensure reproducible builds."
+          echo "Starting clock at $(date)"
+          npm ci
+          echo "Installation complete. Node modules directory size: $(du -sh node_modules | cut -f1)"
+
+      - name: "[PROCESS] Code Quality Check"
+        run: |
+          echo "----------------------------------------------------"
+          echo "🚀 ANALYZING CODE FOR STYLE AND SYNTAX ERRORS..."
+          echo "Target files: ./**/*.js"
+          echo "----------------------------------------------------"
+          npm run lint
+          echo "[SUCCESS] Linter finished with exit code $?"
 
   # Job 2 — Tests
   test:
@@ -26,10 +48,28 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
     steps:
+      - name: "[INIT] Re-checking out code for Test Job"
+        run: echo "Context: Job 'lint' passed. Starting Job 'test'..."
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+
+      - name: "[SETUP] Node.js Environment Injection"
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      - run: npm ci
-      - run: npm test
+
+      - name: "[VERBOSE] Re-installing dependencies (cached)"
+        run: |
+          echo "Verifying npm cache integrity..."
+          npm ci
+          echo "NPM version: $(npm -v)"
+
+      - name: "[CRITICAL] Executing Test Suite"
+        run: |
+          echo "####################################################"
+          echo "🔥 STARTING UNIT AND INTEGRATION TESTS 🔥"
+          echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S')"
+          echo "####################################################"
+          npm test
+          echo "[RESULT] Test execution finished."
+          echo "[CLEANUP] Virtual environment will be destroyed shortly."
