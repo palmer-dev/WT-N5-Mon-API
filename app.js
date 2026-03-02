@@ -2,6 +2,9 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000
 
+//
+app.use(express.json());
+
 // DATAS
 const tasks = [
     {id: 1, title: 'Apprendre Git', done: true},
@@ -20,6 +23,19 @@ app.get('/health', (req, res) => {
 
 app.get('/tasks', (req, res) => {
     res.json(tasks)
+})
+
+app.post('/tasks', (req, res) => {
+    const {title} = req.body
+
+    if (!title) {
+        res.status(400).json({error: 'Le titre est obligatoire'})
+    }
+    const newTask = {id: tasks.length + 1, title, done: false}
+
+    tasks.push(newTask)
+
+    res.status(201).json(newTask)
 })
 
 if (require.main === module) {
